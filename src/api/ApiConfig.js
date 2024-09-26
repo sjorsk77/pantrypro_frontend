@@ -4,6 +4,8 @@ const API_CONFIG = {
         endpoints: {
             login: '/account/login',
             register: '/account/register',
+            user: '/user',
+            pantries: '/pantry',
         },
     },
     edamamApi: {

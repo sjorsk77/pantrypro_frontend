@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import InputBox from "./InputBox";
 import {login} from "../api/ApiWrapper";
+import Cookies from "js-cookie";
 
 export function Login({setIsLogin}) {
 
@@ -20,6 +21,7 @@ export function Login({setIsLogin}) {
 
         try {
             const response = await login(data);
+            Cookies.set('token', response.token);
             console.log(response);
         } catch (error) {
             console.error(error);

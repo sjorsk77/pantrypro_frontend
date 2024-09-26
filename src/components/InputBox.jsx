@@ -18,8 +18,8 @@ const InputBoxWithValidation = ({ label, placeholder, type = 'text', regex, erro
     };
 
     return (
-        <div className="mb-4 w-full">
-            {label && <label className="block mb-1 text-gray-700 font-bold">{label}</label>}
+        <div className="mb-1 w-full">
+            {label && <label className="block text-gray-700 font-bold">{label}</label>}
             <input
                 type={type}
                 value={value}

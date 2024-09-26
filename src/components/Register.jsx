@@ -102,7 +102,7 @@ export function Register({setIsLogin}) {
             <button className='bg-accent-blue px-5 py-3 rounded-xl w-2/3 text-lg font-semibold disabled:opacity-50'
                     onClick={handleRegister}
                     disabled={isLoading || !isFormValid}>
-                {isLoading ? 'Logging in...' : 'Login'}
+                {isLoading ? 'Registering...' : 'Register'}
             </button>
 
         </div>
