@@ -1,163 +1,110 @@
 import { useState, useEffect } from "react";
-import { ApiRegister } from "../api/FridgeMateFunctions";
+import InputBox from "./InputBox";
+import {register} from "../api/ApiWrapper";
 
 export function Register({setIsLogin}) {
 
-    const [userName, setUserName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
-    const [userNameError, setUserNameError] = useState('');
-    const [emailError, setEmailError] = useState('');
-    const [passwordError, setPasswordError] = useState('');
-    const [confirmPasswordError, setConfirmPasswordError] = useState('');
+    const [firstName, setFirstName] = useState('');
+    const [lastName, setLastName] = useState('');
     const [isLoading, setIsLoading] = useState(false);
-    const [disableButton, setDisableButton] = useState(true);
 
-    const regexPatterns = {
-        username: /^.{5,}$/,
-        email: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
-        password: /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/
-    }
+    const isFirstNameValid = firstName !== '' && firstName.match(/^[a-zA-Z]+$/);
+    const isLastNameValid= lastName !== '' && lastName.match(/^[a-zA-Z]+$/);
+    const isEmailValid = email !== '' && email.match(/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/);
+    const isPasswordValid = password !== '' && password.match(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/);
+    const isConfirmPasswordValid = confirmPassword !== '' && confirmPassword === password;
 
-    const handleUsernameChange = (e) => {
-        const newValue = e.target.value;
-        setUserName(newValue);
-
-        validateAllInputs();
-
-        if(!regexPatterns.username.test(newValue) && newValue !== ''){
-            setUserNameError('Username must be atleast 5 characters')
-            setDisableButton(true);
-        } else {
-            setUserNameError('')
-        }
-    }
-
-    const handleEmailChange = (e) => {
-        const newValue = e.target.value;
-        setEmail(newValue);
-
-        validateAllInputs();
-
-        if(!regexPatterns.email.test(newValue) && newValue !== ''){
-            setEmailError('Please enter a valid email')
-            setDisableButton(true);
-        } else {
-            setEmailError('')
-        }
-    }
-
-    const handlePasswordChange = (e) => {
-        const newValue = e.target.value;
-
-        setPassword(newValue);
-
-        validateAllInputs();
-
-        checkIfPasswordsMatch(newValue, confirmPassword);
-
-        if(!regexPatterns.password.test(newValue) && newValue !== ''){
-            setPasswordError('Password must be atleast 8 characters and contain one letter and one number')
-            setDisableButton(true);
-        } else {
-            setPasswordError('')
-        }
-    }
-
-    const handleConfirmPasswordChange = (e) => {
-        const newValue = e.target.value;
-
-        setConfirmPassword(newValue);
-
-        validateAllInputs();
-
-        checkIfPasswordsMatch(newValue, password);
-    }
-
-    const checkIfPasswordsMatch = (pw1, pw2) => {
-
-        console.log((pw1 !== '' || pw2 !== ''));
-        if(pw1 !== pw2 && (pw1 !== '' && pw2 !== '')){
-            setConfirmPasswordError('Passwords do not match')
-            setDisableButton(true);
-        } else {
-            setConfirmPasswordError('')
-        }
-    }
-
-    const validateAllInputs = () => {
-        if (email !== '' && password !== '' && confirmPassword !== '' && userName !== '') {
-            setDisableButton(false);
-        } else {
-            setDisableButton(true);
-        }
-    }
-
-    const handleSubmit = async (event) => {
-        event.preventDefault();
+    const handleRegister = async () => {
         setIsLoading(true);
-        
+
+        const data = {
+            'userName': firstName + ' ' + lastName,
+            'email': email,
+            'password': password,
+            'confirmPassword': confirmPassword,
+        };
+
         try {
-            await ApiRegister(userName, email, password, confirmPassword);
-            setIsLogin(true);
-        } catch(e) {
-            console.error('something went wrong');
+            const response = await register(data);
+            console.log(response);
+        } catch (error) {
+            console.error(error);
         } finally {
             setIsLoading(false);
         }
-    };
+    }
+
+    const isFormValid =
+        isFirstNameValid &&
+        isLastNameValid &&
+        isEmailValid &&
+        isPasswordValid &&
+        isConfirmPasswordValid;
 
     return (
-            <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
-                <h2 className="text-2xl font-bold mb-6 text-center text-gray-800">Register</h2>
-                <div className="space-y-4">
-                    <div>
-                    <input
-                        type="text"
-                        placeholder="Username"
-                        value={userName}
-                        onChange={handleUsernameChange}
-                        className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    />{userNameError && <p className="text-red-600 text-xs">{userNameError}</p>}</div>
-                    <div>                    
-                    <input
-                        type="email"
-                        placeholder="Email"
-                        value={email}
-                        onChange={handleEmailChange}
-                        className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    />
-                    {emailError && <p className="text-red-600 text-xs">{emailError}</p>}</div>
-                    <div>
-                    <input
-                        type="password"
-                        placeholder="Password"
-                        value={password}
-                        onChange={handlePasswordChange}
-                        className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    />
-                    {passwordError && <p className="text-red-600 text-xs">{passwordError}</p>}
-                    </div>
-                    <div>
-                    <input
-                        type="password"
-                        placeholder="Confirm password"
-                        value={confirmPassword}
-                        onChange={handleConfirmPasswordChange}
-                        className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    />
-                    {confirmPasswordError && <p className="text-red-600 text-xs">{confirmPasswordError}</p>}
-                    </div>
+        <div
+            className='flex flex-col justify-center items-center p-5 gap-x-2.5 w-96 h-fit bg-background-gray drop-shadow-md rounded-xl'>
+            <h1 className='text-2xl font-bold mb-4'>Register</h1>
 
-                    <button
-                        className="w-full py-2 bg-blue-500 text-white font-semibold rounded-lg hover:bg-blue-600 transition duration-200 disabled:bg-slate-500"
-                        onClick={handleSubmit}
-                        disabled={isLoading || disableButton}
-                    >
-                        {isLoading ? 'Registering...' : 'Register'}
-                    </button>
-                </div>
+            <div className='flex flex-row gap-x-2.5 w-full'>
+                <InputBox label={'First Name'}
+                          regex={/^[a-zA-Z]+$/}
+                          errorMessage={'First name can only contain letters'}
+                          type={'text'}
+                          placeholder={'Enter your first name'}
+                          value={firstName}
+                          onChange={(e) => {setFirstName(e.target.value);
+                              console.log(isFirstNameValid);}}
+                />
+                <InputBox label={'Last Name'}
+                          regex={/^[a-zA-Z]+$/}
+                          errorMessage={'Last name can only contain letters'}
+                          type={'text'}
+                          placeholder={'Enter your last name'}
+                          value={lastName}
+                          onChange={(e) => {setLastName(e.target.value);
+                              console.log(isLastNameValid);}}
+                />
             </div>
+
+            <InputBox label={'Email'}
+                      regex={/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/}
+                      errorMessage={'Invalid email'}
+                      type={'email'}
+                      placeholder={'Enter your email'}
+                      value={email}
+                      onChange={(e) => {setEmail(e.target.value);
+                          console.log(isEmailValid);}}
+            />
+            <InputBox label={'Password'}
+                      regex={/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/}
+                      errorMessage={'Password must contain at least 8 characters, one uppercase, one lowercase, one number'}
+                      type={'password'}
+                      placeholder={'Enter your password'}
+                      value={password}
+                      onChange={(e) => {setPassword(e.target.value);
+                          console.log(isPasswordValid);}}
+            />
+
+            <InputBox label={'Confirm password'}
+                      type={'password'}
+                      placeholder={'Confirm your password'}
+                      value={password}
+                      onChange={(e) => {setConfirmPassword(e.target.value);
+                          console.log(isConfirmPasswordValid);}}
+            />
+
+            <p className={`text-red-700 pb-3 ${isConfirmPasswordValid ? 'opacity-0' : ''}`}>Passwords do not match</p>
+
+            <button className='bg-accent-blue px-5 py-3 rounded-xl w-2/3 text-lg font-semibold disabled:opacity-50'
+                    onClick={handleRegister}
+                    disabled={isLoading || !isFormValid}>
+                {isLoading ? 'Logging in...' : 'Login'}
+            </button>
+
+        </div>
     );
 }

@@ -18,7 +18,7 @@ export function Account() {
 
     return (
         <div className="flex flex-col pt-20 items-center bg-white h-full">
-            <img src={img} alt="img" className="rounded-xl mb-10"></img>
+            <img alt="img" className="rounded-xl mb-10"></img>
             {isLogin ? <Login setIsLogin={setIsLogin}/> : <Register setIsLogin={setIsLogin}/>}
             <button className="text-blue-500 mt-5" onClick={() => setIsLogin(!isLogin)}>{isLogin ? "Don't have an account?" : "Already have an account?"}</button>
         </div>

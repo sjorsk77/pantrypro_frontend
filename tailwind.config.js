@@ -7,7 +7,7 @@ module.exports = {
     extend: {
       colors: {
         background: {
-          primaryBlue: '#0455bf',
+          gray: '#D9D9D9',
         },
         text: {
           primary: '#F5F5F5',
@@ -16,6 +16,7 @@ module.exports = {
         },
         accent: {
           teal: '#20C997',
+          blue: '#339AF0',
         },
       },
       fontFamily: {

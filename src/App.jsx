@@ -8,8 +8,6 @@ function App() {
 
   const token = Cookies.get('token');
 
-  console.log(token);
-
   return (
     <Router>
       <Routes>

@@ -1,73 +1,55 @@
 import { useState, useEffect } from "react";
-import { ApiLogin } from "../api/FridgeMateFunctions";
-import { useNavigate } from "react-router-dom";
+import InputBox from "./InputBox";
+import {login} from "../api/ApiWrapper";
 
 export function Login({setIsLogin}) {
+
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [error, setError] = useState('');
     const [isLoading, setIsLoading] = useState(false);
-    const navigate = useNavigate();
-    const [disableButton, setDisableButton] = useState(true);
 
 
 
-
-    
-
-
-    const handleSubmit = async (event) => {
-        event.preventDefault();
+    const handleLogin = async () => {
         setIsLoading(true);
+
+        const data = {
+            'email': email,
+            'password': password
+        };
+
         try {
-            await ApiLogin(email, password);
-            setError('');
-            navigate('/home');
-
-        } catch(e) {
-            setError('Invalid credentials');
-        }
-        setIsLoading(false);
-    };
-
-    
-    const validateAllInputs = (v1, v2) => {
-        if (v1 !== '' && v2 !== '') {
-            setDisableButton(false);
-        } else {
-            setDisableButton(true);
+            const response = await login(data);
+            console.log(response);
+        } catch (error) {
+            console.error(error);
+        } finally {
+            setIsLoading(false);
         }
     }
 
-
-
     return (
-            <div className="flex flex-col items-center bg-grey p-8 rounded-lg shadow-2xl w-full max-w-md">
-                <h2 className="text-2xl font-bold mb-6 text-center text-gray-800">Login</h2>
-                <div className="space-y-4">
-                    <input
-                        type="email"
-                        value={email}
-                        placeholder="Email"
-                        onChange={(e) => {setEmail(e.target.value); validateAllInputs(e.target.value, password)}}
-                        className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    />
-                    <input
-                        type="password"
-                        placeholder="Password"
-                        value={password}
-                        onChange={(e) => {setPassword(e.target.value); validateAllInputs(e.target.value, email)}}
-                        className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    />
-                    <button
-                        className='w-full py-2 bg-blue-500 text-white font-semibold rounded-lg hover:bg-blue-600 transition duration-200 disabled:bg-slate-500'
-                        disabled={isLoading || disableButton}
-                        onClick={handleSubmit}
-                    >
-                        {isLoading ? 'Logging in...' : 'Login'}
-                    </button>
-                </div>
-                <p className="mt-5 text-red-600 font-semibold">{error}</p>
+            <div className='flex flex-col justify-center items-center p-5 gap-x-2.5 w-80 h-fit bg-background-gray drop-shadow-md rounded-xl'>
+                <h1 className='text-2xl font-bold'>Login</h1>
+                <InputBox label={'Email'}
+                          type={'email'}
+                          placeholder={'Enter your email'}
+                          value={email}
+                          onChange={(e) => setEmail(e.target.value)}
+                />
+                <InputBox label={'Password'}
+                          type={'password'}
+                          placeholder={'Enter your password'}
+                          value={password}
+                          onChange={(e) => setPassword(e.target.value)}
+                />
+
+                <button className='bg-accent-blue px-5 py-3 rounded-xl w-2/3 text-lg font-semibold'
+                        onClick={handleLogin}
+                        disabled={isLoading}>
+                    {isLoading ? 'Logging in...' : 'Login'}
+                </button>
+
             </div>
     );
 }
