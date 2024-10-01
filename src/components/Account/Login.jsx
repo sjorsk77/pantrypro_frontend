@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
-import InputBox from "./InputBox";
-import {login} from "../api/ApiWrapper";
+import InputBox from "../Inputs/InputBox";
+import {login} from "../../api/ApiWrapper";
 import Cookies from "js-cookie";
 
 export function Login({setIsLogin}) {

@@ -23,7 +23,12 @@ module.exports = {
             fridge: '#73C07A',
             shelf: '#C09673',
             frozen: '#73A4C0',
-        }
+        },
+        expiry: {
+          long: '#BBF0AE',
+          soon: '#FF9B70',
+          short: '#F28C8C',
+        },
       },
       fontFamily: {
         sans: ['Roboto', 'sans-serif'],

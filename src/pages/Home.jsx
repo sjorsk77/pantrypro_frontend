@@ -3,7 +3,7 @@ import {Navigate, useNavigate} from "react-router-dom";
 import Cookies from "js-cookie";
 import {getUser} from "../api/ApiWrapper";
 import Navbar from "../components/Navbar";
-import {Foodwatcher} from "../components/Foodwatcher";
+import Foodwatcher from "../components/Foodwatcher";
 import HomeOption from "../components/HomeOption";
 
 
@@ -15,7 +15,7 @@ export function Home() {
     const [isLoading, setLoading] = useState(true);
 
 
-    useEffect(() => {
+    useEffect( () => {
         const fetchData = async () => {
             try {
                 const response = await getUser(Cookies.get('token'));
@@ -86,7 +86,7 @@ export function Home() {
                     />
 
                 </div>
-                <Foodwatcher />
+                {user && <Foodwatcher riskDays={user.riskDays} />}
             </div>
         </div>
 

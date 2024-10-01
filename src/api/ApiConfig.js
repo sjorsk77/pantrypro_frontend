@@ -6,6 +6,9 @@ const API_CONFIG = {
             register: '/account/register',
             user: '/user',
             pantries: '/pantry',
+            singlePantry: '/pantry/single',
+            food: '/food',
+            riskFood: '/food/risk',
         },
     },
     edamamApi: {

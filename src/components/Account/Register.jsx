@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
-import InputBox from "./InputBox";
-import {register} from "../api/ApiWrapper";
+import InputBox from "../Inputs/InputBox";
+import {register} from "../../api/ApiWrapper";
 
 export function Register({setIsLogin}) {
 

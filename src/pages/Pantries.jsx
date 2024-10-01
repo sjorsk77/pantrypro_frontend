@@ -1,6 +1,6 @@
 ﻿import Navbar from "../components/Navbar";
-import {PantryList} from "../components/PantryList";
-import PantryView from "../components/PantryView";
+import {PantryList} from "../components/Pantry/PantryList";
+import PantryView from "../components/Pantry/PantryView";
 import {useState} from "react";
 
 export function Pantries() {
@@ -14,7 +14,7 @@ export function Pantries() {
     return (
         <div>
             <Navbar />
-            <div className="flex flex-row px-20">
+            <div className="flex flex-row px-20 gap-10">
                 <PantryList onPantrySelect={handlePantrySelect} />
                 <PantryView pantryId={selectedPantry} />
             </div>

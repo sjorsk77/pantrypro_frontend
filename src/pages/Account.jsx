@@ -1,5 +1,5 @@
-import { Login } from "../components/Login"
-import { Register } from "../components/Register"
+import { Login } from "../components/Account/Login"
+import { Register } from "../components/Account/Register"
 import { useState, useEffect } from "react"
 import img from "../assets/images/Logo.png"
 import { useNavigate } from "react-router-dom"

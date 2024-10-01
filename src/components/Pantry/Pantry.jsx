@@ -1,6 +1,6 @@
-﻿import {deletePantry} from "../api/ApiWrapper";
+﻿import {deletePantry} from "../../api/ApiWrapper";
 
-function Pantry({id, name, lastUpdated, type, numberOfItems, onClick}) {
+function Pantry({id, name, lastUpdated, type, numberOfItems, onClick, className}) {
 
     const typeStyles = {
         fridge: 'bg-storage-fridge',
@@ -11,16 +11,15 @@ function Pantry({id, name, lastUpdated, type, numberOfItems, onClick}) {
     const handleDelete = async () => {
         try {
             const response = await deletePantry(id);
-            console.log(response);
+            onClick();
         } catch (error) {
-            console.error(error);
         }
     }
 
     const backgroundStyle = typeStyles[type] || 'bg-gray-200';
 
     return (
-        <button className={`w-full h-fit flex flex-col items-center p-3 rounded-2xl shadow-2xl ${backgroundStyle}`}
+        <button className={`w-full h-fit flex flex-col items-center p-3 rounded-2xl shadow-2xl ${backgroundStyle} ${className}`}
         onClick={onClick}>
             <div className="flex flex-row justify-between gap-10 w-full items-center">
                 <h1 className="text-3xl font-bold">{name}</h1>
