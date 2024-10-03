@@ -1,13 +1,18 @@
 ﻿import React, {useEffect, useState} from 'react';
-import {getFood, getPantry} from "../../api/ApiWrapper";
+import useApiWrapper from "../../api/ApiWrapper";
 import FoodItem from "../Food/FoodItem";
+import AddFood from "../Food/AddFood";
+import {toast} from "react-toastify";
 
 
 
-function PantryView({pantryId, pantryName}) {
+function PantryView({pantryId, onPantryDelete}) {
+
+    const {getFood, getPantry, deletePantry} = useApiWrapper();
 
     const [foods, setFoods] = useState([]);
     const [pantry, setPantry] = useState({});
+    const [popupVisible, setPopupVisible] = useState(false);
 
     const getFoods = async () => {
         if (!pantryId) return; // Early exit if no pantryId is selected
@@ -36,32 +41,61 @@ function PantryView({pantryId, pantryName}) {
         getPantryData()
     }, [pantryId]);
 
+    const handleAddFoodClick = () => {
+        setPopupVisible(true);
+    };
+
+    const handleDeletePantry = async () => {
+        try {
+            await deletePantry(pantryId);
+            onPantryDelete();
+            toast.success('Pantry deleted');
+        } catch (error) {
+            toast.error(error.message);
+        }
+    };
+
 
     return (
         <div className="flex flex-col items-center w-full h-fit">
-            <div className=" flex flex-row justify-between w-full px-20">
+            <div className=" flex flex-row justify-between w-full">
                 <h1 className="text-3xl font-bold py-5">{pantry.name}</h1>
-                <button className="bg-accent-teal rounded-t-2xl w-2/12 text-4xl font-semibold">add food</button>
+                <button className="bg-green-300 text-gray-700 px-4 py-2 rounded-md mr-2 my-5"
+                        onClick={handleAddFoodClick}>add food
+                </button>
+                <button className="bg-red-400 text-gray-700 px-4 py-2 rounded-md mr-2 my-5"
+                        onClick={handleDeletePantry}>Delete pantry
+                </button>
 
             </div>
             <div className="flex flex-col  bg-white w-full h-full rounded-2xl">
-                <div className="flex flex-row w-full justify-between px-10 mt-4">
-                    <h1 className="text-3xl font-bold">{foods.length === 0 ? (<h1>No foods in pantry</h1>) : (<h1>Food items: {foods.length}</h1>)}</h1>
-                    <h1>Search bar</h1>
+                <div className="flex flex-row w-full items-cetner justify-between px-10 mt-4">
+                    <h1 className="text-3xl font-bold py-10">{foods.length === 0 ? (<h1>Add food to your pantry!</h1>) : (<h1>Food items: {foods.length}</h1>)}</h1>
                     <button>
                         <box-icon name='filter-alt'></box-icon>
                     </button>
                 </div>
                 <div>
                     <ul>
-                        {foods.map((food) => {
-                            return (
-                                <FoodItem key={food.id} id={food.id} name={food.name} expiryDate={food.expiryDate} weight={food.weight} onClick={getFoods}/>
-                            );
-                        })}
+                        {foods
+                            .sort((a, b) => new Date(a.expiryDate) - new Date(b.expiryDate)) // Sort by expiryDate
+                            .map((food) => {
+                                return (
+                                    <FoodItem
+                                        key={food.id}
+                                        id={food.id}
+                                        name={food.name}
+                                        expiryDate={food.expiryDate}
+                                        weight={food.quantity}
+                                        onClick={getFoods}
+                                    />
+                                );
+                            })}
                     </ul>
                 </div>
             </div>
+
+            {popupVisible && <AddFood onAdd={getFoods} onClose={() => setPopupVisible(false) } pantryId={pantryId} />}
 
         </div>
     );

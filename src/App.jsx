@@ -4,6 +4,7 @@ import Cookies from 'js-cookie'
 import { Account } from './pages/Account';
 import { Home } from './pages/Home';
 import { Pantries } from './pages/Pantries';
+import { ToastContainer } from 'react-toastify';
 
 function App() {
 
@@ -20,7 +21,9 @@ function App() {
         
         {/* Optionally, handle other routes here */}
       </Routes>
+
     </Router>
+
   );
 }
 

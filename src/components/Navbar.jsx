@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import img from '../assets/images/Logo.png';
 import Cookies from "js-cookie";
 import {useNavigate} from "react-router-dom";
+import {toast} from "react-toastify";
 
 const Navbar = () => {
     const navigate = useNavigate();
@@ -21,7 +22,7 @@ const Navbar = () => {
                 <Link to="/">Contact us</Link>
             </div>
             <button className="flex items-center gap-1 text-lg font-semibold bg-background-gray rounded-xl px-5 py-5 h-1/3 shadow-md"
-                onClick={() => {Cookies.set('token', '');navigate('/')}}
+                onClick={() => {Cookies.set('token', '');navigate('/login'); toast.success('Logged out')}}
                 >
                 Logout
                 <box-icon name='log-out' size="sm"></box-icon>

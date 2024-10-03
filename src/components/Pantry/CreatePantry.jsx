@@ -1,11 +1,14 @@
-﻿import InputBox from "../Inputs/InputBox";
+﻿import {InputBox} from "../Inputs/InputBox";
 import Dropdown from "../Inputs/Dropdown";
 import {useState} from "react";
-import {createPantry} from "../../api/ApiWrapper";
+import useApiWrapper from "../../api/ApiWrapper";
 import Cookies from "js-cookie";
+import {toast} from "react-toastify";
 
 
 function CreatePantry( {onPantryCreated} ) {
+
+    const {createPantry} = useApiWrapper();
 
     const [name, setName] = useState('');
     const [storageType, setStorageType] = useState('');
@@ -22,13 +25,14 @@ function CreatePantry( {onPantryCreated} ) {
             'storageType': storageType.toUpperCase()
         };
 
-        console.log(data);
 
         try {
             const response = await createPantry(data);
             onPantryCreated();
-        } catch (error){}
-
+            toast.success('Pantry created successfully');
+        } catch (error){
+            toast.error(error.message);
+        }
     }
 
     const isButtonDisabled = !name || !storageType;

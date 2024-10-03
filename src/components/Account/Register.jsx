@@ -1,8 +1,14 @@
 import { useState, useEffect } from "react";
-import InputBox from "../Inputs/InputBox";
-import {register} from "../../api/ApiWrapper";
+import {InputBox} from "../Inputs/InputBox";
+import useApiWrapper from "../../api/ApiWrapper";
+import {toast} from "react-toastify";
+import {useNavigate} from "react-router-dom";
 
 export function Register({setIsLogin}) {
+
+    const navigate = useNavigate();
+
+    const {register} = useApiWrapper();
 
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -10,18 +16,20 @@ export function Register({setIsLogin}) {
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
     const [isLoading, setIsLoading] = useState(false);
+    const [error, setError] = useState('');
 
     const isFirstNameValid = firstName !== '' && firstName.match(/^[a-zA-Z]+$/);
     const isLastNameValid= lastName !== '' && lastName.match(/^[a-zA-Z]+$/);
     const isEmailValid = email !== '' && email.match(/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/);
     const isPasswordValid = password !== '' && password.match(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/);
-    const isConfirmPasswordValid = confirmPassword !== '' && confirmPassword === password;
+    const isConfirmPasswordValid =  confirmPassword === password && confirmPassword !== '';
 
     const handleRegister = async () => {
         setIsLoading(true);
 
         const data = {
-            'userName': firstName + ' ' + lastName,
+            'firstName': firstName,
+            'lastName': lastName,
             'email': email,
             'password': password,
             'confirmPassword': confirmPassword,
@@ -29,9 +37,10 @@ export function Register({setIsLogin}) {
 
         try {
             const response = await register(data);
-            console.log(response);
+            toast.success('Registration successful');
+            navigate('/');
         } catch (error) {
-            console.error(error);
+            toast.error(error.message);
         } finally {
             setIsLoading(false);
         }
@@ -56,8 +65,7 @@ export function Register({setIsLogin}) {
                           type={'text'}
                           placeholder={'Enter your first name'}
                           value={firstName}
-                          onChange={(e) => {setFirstName(e.target.value);
-                              console.log(isFirstNameValid);}}
+                          onChange={(e) => setFirstName(e.target.value)}
                 />
                 <InputBox label={'Last Name'}
                           regex={/^[a-zA-Z]+$/}
@@ -65,8 +73,7 @@ export function Register({setIsLogin}) {
                           type={'text'}
                           placeholder={'Enter your last name'}
                           value={lastName}
-                          onChange={(e) => {setLastName(e.target.value);
-                              console.log(isLastNameValid);}}
+                          onChange={(e) => setLastName(e.target.value)}
                 />
             </div>
 
@@ -76,8 +83,7 @@ export function Register({setIsLogin}) {
                       type={'email'}
                       placeholder={'Enter your email'}
                       value={email}
-                      onChange={(e) => {setEmail(e.target.value);
-                          console.log(isEmailValid);}}
+                      onChange={(e) => setEmail(e.target.value)}
             />
             <InputBox label={'Password'}
                       regex={/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/}
@@ -85,19 +91,19 @@ export function Register({setIsLogin}) {
                       type={'password'}
                       placeholder={'Enter your password'}
                       value={password}
-                      onChange={(e) => {setPassword(e.target.value);
-                          console.log(isPasswordValid);}}
+                      onChange={(e) => setPassword(e.target.value)}
             />
 
             <InputBox label={'Confirm password'}
                       type={'password'}
                       placeholder={'Confirm your password'}
-                      value={password}
-                      onChange={(e) => {setConfirmPassword(e.target.value);
-                          console.log(isConfirmPasswordValid);}}
+                      value={confirmPassword}
+                      onChange={(e) => setConfirmPassword(e.target.value)}
             />
 
-            <p className={`text-red-700 pb-3 ${isConfirmPasswordValid ? 'opacity-0' : ''}`}>Passwords do not match</p>
+            <p className={`text-red-700 ${(password !== '' && confirmPassword !== '' && !isConfirmPasswordValid) ? '' : 'opacity-0'}`}>
+                Passwords do not match
+            </p>
 
             <button className='bg-accent-blue px-5 py-3 rounded-xl w-2/3 text-lg font-semibold disabled:opacity-50'
                     onClick={handleRegister}

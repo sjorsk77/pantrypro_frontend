@@ -1,9 +1,15 @@
 import { useState, useEffect } from "react";
-import InputBox from "../Inputs/InputBox";
-import {login} from "../../api/ApiWrapper";
+import {InputBox} from "../Inputs/InputBox";
 import Cookies from "js-cookie";
+import useApiWrapper from "../../api/ApiWrapper";
+import {useNavigate} from "react-router-dom";
+import {toast} from "react-toastify";
 
 export function Login({setIsLogin}) {
+
+    const navigate = useNavigate();
+
+    const {login} = useApiWrapper();
 
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -22,9 +28,9 @@ export function Login({setIsLogin}) {
         try {
             const response = await login(data);
             Cookies.set('token', response.token);
-            console.log(response);
+            navigate('/home');
         } catch (error) {
-            console.error(error);
+            toast.error(error.message);
         } finally {
             setIsLoading(false);
         }

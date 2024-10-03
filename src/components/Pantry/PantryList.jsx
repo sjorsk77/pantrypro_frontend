@@ -1,14 +1,15 @@
 ﻿import Pantry from "./Pantry";
-import InputBox from "../Inputs/InputBox";
 import {useState} from "react";
 import {useEffect} from "react";
-import {getPantries} from "../../api/ApiWrapper";
-import {createPantry} from "../../api/ApiWrapper";
 import Cookies from "js-cookie";
-import Dropdown from "../Inputs/Dropdown";
 import CreatePantry from "./CreatePantry";
+import useApiWrapper from "../../api/ApiWrapper";
+import useDateServices from "../../Services/DateServices";
 
-export function PantryList({ onPantrySelect} ) {
+export function PantryList({ onPantrySelect, refreshList} ) {
+
+    const {getPantries} = useApiWrapper();
+    const {formatDate} = useDateServices();
 
     const [pantries, setPantries] = useState([]);
     const [selectedPantryId, setSelectedPantryId] = useState(null);
@@ -18,26 +19,26 @@ export function PantryList({ onPantrySelect} ) {
             const response = await getPantries(Cookies.get('token'));
             setPantries(response);
         } catch (error) {
-            Cookies.set('token', '');
         }
     };
 
-    const formatDate = (dateString) => {
-        const date = new Date(dateString);
-        const day = String(date.getDate()).padStart(2, '0'); // Pad single digit days
-        const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are 0-indexed
-        const year = date.getFullYear();
-
-        return `${day}/${month}/${year}`;
-    }
-
     useEffect(() => {
         fetchPantries();
-    }, []);
+    }, [refreshList]);
+
+    const handlePantryClick = (pantryId) => {
+        if (pantryId === selectedPantryId) {
+            setSelectedPantryId(null); // Deselect if the pantry is already selected
+            onPantrySelect(null); // Notify the parent that no pantry is selected
+        } else {
+            setSelectedPantryId(pantryId); // Select the clicked pantry
+            onPantrySelect(pantryId); // Notify the parent of the selected pantry
+        }
+    };
 
 
     return (
-        <div className="w-fit bg-white max-h-[50rem] h-fit flex flex-col items-center p-3 rounded-2xl shadow-2xl">
+        <div className="min-w-fit bg-white max-h-[50rem] h-fit flex flex-col items-center p-3 rounded-2xl shadow-2xl">
             <h1 className="text-xl font-bold">Pantries</h1>
             <CreatePantry onPantryCreated={fetchPantries} />
             <ul className="w-full flex flex-col items-center gap-5 mt-5 overflow-auto">
@@ -48,7 +49,7 @@ export function PantryList({ onPantrySelect} ) {
                     lastUpdated={formatDate(pantry.updatedAt)}
                     type={pantry.storageType.toLowerCase()}
                     numberOfItems={pantry.numberOfItems ?? 0}
-                    onClick={() => { onPantrySelect(pantry.id);  setSelectedPantryId(pantry.id); console.log(selectedPantryId); fetchPantries(); }}
+                    onClick={() => handlePantryClick(pantry.id)}
                     className={selectedPantryId === pantry.id ? "border-2 border-black " : ""}
                 />)}
             </ul>

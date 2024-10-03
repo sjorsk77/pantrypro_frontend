@@ -1,13 +1,15 @@
 import { useEffect, useState } from "react";
-import {Navigate, useNavigate} from "react-router-dom";
+import {useNavigate} from "react-router-dom";
 import Cookies from "js-cookie";
-import {getUser} from "../api/ApiWrapper";
 import Navbar from "../components/Navbar";
 import Foodwatcher from "../components/Foodwatcher";
 import HomeOption from "../components/HomeOption";
+import useApiWrapper from "../api/ApiWrapper";
 
 
 export function Home() {
+
+    const {getUser} = useApiWrapper();
 
     const navigate = useNavigate();
 

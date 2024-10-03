@@ -18,9 +18,9 @@ const API_CONFIG = {
         },
     },
     openfoodfactsApi: {
-        baseURL: 'https://us.openfoodfacts.org',
+        baseURL: 'https://world.openfoodfacts.org/api/v0',
         endpoints: {
-
+            getProduct: '/product',
         },
     },
 };
