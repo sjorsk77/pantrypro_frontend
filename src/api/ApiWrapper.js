@@ -26,13 +26,15 @@ const useApiWrapper = () => {
             body: body ? JSON.stringify(body) : null,
         };
 
+        console.log('Sending request to:', url, 'with options:', options);
+
 
         const response = await fetch(url, options);
 
         if (response.status === 403 || response.status === 401) {
             console.log('Unauthorized');
             Cookies.set('token', '');
-            navigate('/');
+            navigate('/login');
         }
 
         const contentType = response.headers.get('Content-Type');
@@ -45,7 +47,7 @@ const useApiWrapper = () => {
         }
 
         if (!response.ok) {
-            console.log('Error response:', response.status); // Log the error
+            console.log('Error response:', response.statusText); // Log the error
             throw new Error(responseBody);
         }
 
@@ -68,6 +70,10 @@ const useApiWrapper = () => {
         getFood: (pantryId) => sendApiCall('pantryproApi', 'food', 'GET', null, pantryId, true),
         deleteFood: (id) => sendApiCall('pantryproApi', 'food', 'DELETE', null, id, true),
         addFood: (data) => sendApiCall('pantryproApi', 'food', 'POST', data, null, true),
+
+        getDiets: (token) => sendApiCall('pantryproApi', 'diets', 'GET', null, token, true),
+        updateDiet: (data) => sendApiCall('pantryproApi', 'diets', 'PUT', data, data.id, true),
+        getDietTypes: () => sendApiCall('pantryproApi', 'diets', 'GET', null, 'types', true),
 
         getRiskFood: (body) => sendApiCall('pantryproApi', 'riskFood', 'POST', body, null, true),
 

@@ -1,11 +1,11 @@
 ﻿import useApiWrapper from "../../api/ApiWrapper";
-import useDateServices from "../../Services/DateServices";
+import useFormatServices from "../../Services/FormatServices";
 import {toast} from "react-toastify";
 
 function FoodItem({id, name, expiryDate, weight, onClick}) {
 
     const {deleteFood} = useApiWrapper();
-    const {formatDate} = useDateServices();
+    const {formatDate} = useFormatServices();
 
 
     const expirationStyles = {

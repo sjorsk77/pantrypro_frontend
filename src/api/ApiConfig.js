@@ -9,6 +9,7 @@ const API_CONFIG = {
             singlePantry: '/pantry/single',
             food: '/food',
             riskFood: '/food/risk',
+            diets: '/diet',
         },
     },
     edamamApi: {

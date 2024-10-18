@@ -77,4 +77,38 @@ const InputBoxWithUnit = ({ label, placeholder, value, onChange, unit = 'gr' }) 
     );
 };
 
-export { InputBox, InputBoxWithUnit };
+//input looks like text
+const EditableText = ({ value, onChange }) => {
+    const [internalValue, setInternalValue] = useState(value || '');
+
+    useEffect(() => {
+        setInternalValue(value);
+    }, [value]);
+
+    const handleChange = (event) => {
+        const newValue = event.target.value;
+        setInternalValue(newValue);
+
+        // Pass the entire event to the parent component
+        if (onChange) {
+            onChange(Number(newValue));
+        }
+    };
+
+    return (
+        <input
+            type="text"
+            value={internalValue}
+            onChange={handleChange}
+            className="bg-transparent border-none focus:outline-none text-gray-900 w-fit" // Tailwind classes
+            style={{
+                fontSize: 'inherit', // Inherit font size
+                color: 'inherit',    // Inherit text color
+                width: 'auto',       // Full width
+            }}
+        />
+    );
+};
+
+
+export { InputBox, InputBoxWithUnit, EditableText };

@@ -1,4 +1,5 @@
 ﻿import React, { useState } from 'react';
+import { useEffect } from 'react';
 
 const Dropdown = ({ label, options, onSelect }) => {
     const [isOpen, setIsOpen] = useState(false);
@@ -39,4 +40,40 @@ const Dropdown = ({ label, options, onSelect }) => {
     );
 };
 
-export default Dropdown;
+const EditableDropdown = ({ options, value, onChange }) => {
+    const [selectedValue, setSelectedValue] = useState(value || options[0]?.value || '');
+
+    useEffect(() => {
+        setSelectedValue(value);
+    }, [value]);
+
+    const handleChange = (event) => {
+        const newValue = event.target.value;
+        setSelectedValue(newValue);
+
+        // Pass the selected value to the parent component
+        if (onChange) {
+            onChange(newValue);
+        }
+    };
+
+    return (
+        <select
+            value={selectedValue}
+            onChange={handleChange}
+            className="bg-transparent border-none focus:outline-none text-gray-900"
+            style={{
+                WebkitAppearance: 'none',
+                MozAppearance: 'none',
+            }}
+        >
+            {options.map((option) => (
+                <option key={option.id} value={option.id}>
+                    {option.name}
+                </option>
+            ))}
+        </select>
+    );
+};
+
+export {Dropdown, EditableDropdown};

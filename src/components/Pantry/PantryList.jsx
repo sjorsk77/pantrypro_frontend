@@ -4,12 +4,12 @@ import {useEffect} from "react";
 import Cookies from "js-cookie";
 import CreatePantry from "./CreatePantry";
 import useApiWrapper from "../../api/ApiWrapper";
-import useDateServices from "../../Services/DateServices";
+import useFormatServices from "../../Services/FormatServices";
 
 export function PantryList({ onPantrySelect, refreshList} ) {
 
     const {getPantries} = useApiWrapper();
-    const {formatDate} = useDateServices();
+    const {formatDate} = useFormatServices();
 
     const [pantries, setPantries] = useState([]);
     const [selectedPantryId, setSelectedPantryId] = useState(null);

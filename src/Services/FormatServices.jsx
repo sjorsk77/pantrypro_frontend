@@ -1,4 +1,4 @@
-﻿const useDateServices = () => {
+﻿const useFormatServices = () => {
     const formatDate = (dateString) => {
         const date = new Date(dateString);
         const day = String(date.getDate()).padStart(2, '0'); // Pad single digit days
@@ -8,7 +8,11 @@
         return `${day}/${month}/${year}`;
     }
 
-    return {formatDate};
+    const formatEnums = (enumString) => {
+        return enumString.charAt(0).toUpperCase() + enumString.slice(1).toLowerCase();
+    }
+
+    return {formatDate, formatEnums};
 }
 
-export default useDateServices;
+export default useFormatServices;

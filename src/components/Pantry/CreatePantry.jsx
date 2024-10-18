@@ -1,5 +1,5 @@
 ﻿import {InputBox} from "../Inputs/InputBox";
-import Dropdown from "../Inputs/Dropdown";
+import {Dropdown} from "../Inputs/Dropdown";
 import {useState} from "react";
 import useApiWrapper from "../../api/ApiWrapper";
 import Cookies from "js-cookie";
