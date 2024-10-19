@@ -1,4 +1,4 @@
-﻿import Navbar from "../components/Navbar";
+import Navbar from "../components/Navbar";
 import {DietList} from "../components/Diet/DietList";
 import {useState} from "react";
 

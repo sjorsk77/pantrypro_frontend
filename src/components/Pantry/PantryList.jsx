@@ -1,4 +1,4 @@
-﻿import Pantry from "./Pantry";
+import Pantry from "./Pantry";
 import {useState} from "react";
 import {useEffect} from "react";
 import Cookies from "js-cookie";
