@@ -1,4 +1,4 @@
-﻿import {useRef, useEffect, useState} from "react";
+import {useRef, useEffect, useState} from "react";
 import {InputBox, InputBoxWithUnit} from "../Inputs/InputBox";
 import useApiWrapper from "../../api/ApiWrapper";
 import {toast} from "react-toastify";
