@@ -1,4 +1,4 @@
-﻿import {Link} from "react-router-dom";
+import {Link} from "react-router-dom";
 
 
 function HomeOption({ link = "/", bgColor = "#FFFFFF", title = "option", icon = "image-add", description = "add description" }) {
