@@ -24,6 +24,10 @@ jobs:
       - name: Install dependencies
         run: npm install --legacy-peer-deps
 
+      - name: Install babel
+        run: npm install --save-dev @babel/plugin-proposal-private-property-in-object
+
+
       - name: Build the React app
         run: npm run build
 
