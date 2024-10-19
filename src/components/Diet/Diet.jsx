@@ -1,4 +1,4 @@
-﻿import React, {useState, useRef, useEffect} from "react";
+import React, {useState, useRef, useEffect} from "react";
 import {EditableText} from "../Inputs/InputBox";
 import useApiWrapper from "../../api/ApiWrapper";
 import useFormatServices from "../../Services/FormatServices";

@@ -1,4 +1,4 @@
-﻿import {useState, useEffect} from "react";
+import {useState, useEffect} from "react";
 import useApiWrapper from "../../api/ApiWrapper";
 import Cookies from "js-cookie";
 import {Diet} from "./Diet";

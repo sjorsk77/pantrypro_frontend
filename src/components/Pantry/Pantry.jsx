@@ -1,4 +1,4 @@
-﻿function Pantry({id, name, lastUpdated, type, numberOfItems, onClick, className}) {
+function Pantry({id, name, lastUpdated, type, numberOfItems, onClick, className}) {
 
     const typeStyles = {
         fridge: 'bg-storage-fridge',
