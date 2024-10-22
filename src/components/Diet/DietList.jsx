@@ -8,7 +8,7 @@ export function DietList({refreshList}) {
     const {getDiets} = useApiWrapper();
 
     const [diets, setDiets] = useState([]);
-    const [selectedDietId, setSelectedDietId] = useState(null);
+    const [selectedDietId] = useState(null);
 
     const fetchDiets = async () => {
         try {
