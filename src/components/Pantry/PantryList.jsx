@@ -23,7 +23,7 @@ export function PantryList({ onPantrySelect, refreshList} ) {
     };
 
     useEffect(() => {
-        fetchPantries();
+        fetchPantries().then(r => console.log(r));
     }, [refreshList]);
 
     const handlePantryClick = (pantryId) => {

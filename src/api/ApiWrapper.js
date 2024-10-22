@@ -74,6 +74,7 @@ const useApiWrapper = () => {
         getDiets: (token) => sendApiCall('pantryproApi', 'diets', 'GET', null, token, true),
         updateDiet: (data) => sendApiCall('pantryproApi', 'diets', 'PUT', data, data.id, true),
         getDietTypes: () => sendApiCall('pantryproApi', 'diets', 'GET', null, 'types', true),
+        addDiet: (data) => sendApiCall('pantryproApi', 'createDiet', 'POST', data, null, true),
 
         getRiskFood: (body) => sendApiCall('pantryproApi', 'riskFood', 'POST', body, null, true),
 

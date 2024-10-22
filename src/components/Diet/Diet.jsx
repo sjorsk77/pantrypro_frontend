@@ -2,6 +2,7 @@ import React, {useState, useRef, useEffect} from "react";
 import {EditableText} from "../Inputs/InputBox";
 import useApiWrapper from "../../api/ApiWrapper";
 import useFormatServices from "../../Services/FormatServices";
+import SelectDietTypes from "./SelectDietTypes";
 
 export function Diet ({diet, className}) {
 
@@ -25,14 +26,9 @@ export function Diet ({diet, className}) {
         }
     }
 
-    const getFilteredDietTypes = () => {
-        return dietTypes.filter(
-            (type) => !currentDiet.dietTypes.some((currentType) => currentType.id === type.id)
-        );
-    };
 
     useEffect(() => {
-        fetchDietTypes();
+        fetchDietTypes().then(r => console.log(r));
     }, []);
 
     useEffect(() => {
@@ -54,7 +50,13 @@ export function Diet ({diet, className}) {
 
     const handleSave = async () => {
         try {
-            await updateDiet(currentDiet);
+            await updateDiet({
+                id: currentDiet.id,
+                name: currentDiet.name,
+                minCalories: currentDiet.minCalories,
+                maxCalories: currentDiet.maxCalories,
+                dietTypes: currentDiet.dietTypes
+            });
             setIsChanged(false); // Reset changed state after saving
         } catch (error) {
             console.log(error);
@@ -70,33 +72,18 @@ export function Diet ({diet, className}) {
         });
     };
 
-    const handleDietTypeChange = (event) => {
-        const selectedTypeId = parseInt(event.target.value);
-        const selectedType = getFilteredDietTypes().find(type => type.id === selectedTypeId);
-
-        if (selectedType) {
-            setCurrentDiet(prev => {
-                const updatedDietTypes = [...prev.dietTypes, selectedType]; // Append selected type
-
-                // Return updated diet object
-                return {
-                    ...prev,
-                    dietTypes: updatedDietTypes,
-                };
-            });
-
-            setIsChanged(true);
-            setSelectedDietType("");// Mark as changed
-        }
-
-        // Log the updated dietTypes from currentDiet
-        console.log(currentDiet.dietTypes); // This will still show the previous state due to closure
+    const handleDietTypesChange = (updatedDietTypes) => {
+        setCurrentDiet((prev) => ({
+            ...prev,
+            dietTypes: updatedDietTypes,
+        }));
+        setIsChanged(true);
     };
 
     const isButtonDisabled = !isChanged;
 
     return (
-        <div className='bg-background-gray rounded-lg px-5 overflow-auto w-96 h-fit'>
+        <div className='bg-white rounded-lg px-5 overflow-auto w-96 h-fit'>
             <div className="flex flex-row justify-between gap-10 w-full items-center">
                 <h1 className="text-3xl font-bold">{diet?.name ?? 'Unnamed Diet'}</h1>
 
@@ -122,22 +109,7 @@ export function Diet ({diet, className}) {
                         <p className='pr-1'>Max calories: </p>
                         <EditableText value={diet?.maxCalories ?? 0} onChange={handleChange('maxCalories')}/>
                     </div>
-                    <div className="flex flex-wrap items-center space-x-2 overflow-auto">
-                        <ul className='flex flex-wrap gap-x-5 w-full'>
-                            {currentDiet.dietTypes.map((type) => (
-                                <li key={type.id} className='flex-shrink-0'>{type.name}</li>
-                            ))
-                            }
-                            <li>
-                                <select className="w-[40px] px-1 appearance-none bg-transparent" defaultValue='' onChange={handleDietTypeChange} value={selectedDietType}>
-                                    <option value="" disabled hidden>+</option>
-                                    {getFilteredDietTypes().map((type) => (
-                                        <option key={type.id} value={type.id}>{type.name}</option>
-                                    ))}
-                                </select>
-                            </li>
-                        </ul>
-                    </div>
+                    <SelectDietTypes initialDietTypes={currentDiet.dietTypes} onDietTypesChange={handleDietTypesChange} />
                 </div>
             </div>
         </div>
