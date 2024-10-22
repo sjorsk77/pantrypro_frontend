@@ -1,4 +1,4 @@
-﻿import React, {useEffect, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import useApiWrapper from "../../api/ApiWrapper";
 import FoodItem from "../Food/FoodItem";
 import AddFood from "../Food/AddFood";

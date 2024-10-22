@@ -1,4 +1,4 @@
-﻿import Navbar from "../components/Navbar";
+import Navbar from "../components/Navbar";
 import {PantryList} from "../components/Pantry/PantryList";
 import PantryView from "../components/Pantry/PantryView";
 import {useState} from "react";
