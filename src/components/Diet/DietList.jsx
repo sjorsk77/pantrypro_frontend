@@ -21,7 +21,7 @@ export function DietList({refreshList}) {
     }
 
     useEffect(() => {
-        fetchDiets();
+        fetchDiets().then(r => console.log(r));
     }, [refreshList]);
 
 

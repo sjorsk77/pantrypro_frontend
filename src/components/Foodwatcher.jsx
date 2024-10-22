@@ -2,12 +2,8 @@ import {useEffect, useState} from "react";
 import useApiWrapper from "../api/ApiWrapper";
 import useFormatServices from "../Services/FormatServices";
 import Cookies from "js-cookie";
-import {useNavigate} from "react-router-dom";
-import {InputBox} from "./Inputs/InputBox";
 
 function Foodwatcher ({ riskDays })  {
-
-    const navigate = useNavigate();
 
     const { getRiskFood } = useApiWrapper();
     const { formatDate } = useFormatServices();
@@ -29,7 +25,7 @@ function Foodwatcher ({ riskDays })  {
     }
 
     useEffect(() => {
-        getRiskFoods();
+        getRiskFoods().then(r => console.log(r));
     }, []);
 
     return (
@@ -53,6 +49,6 @@ function Foodwatcher ({ riskDays })  {
             </div>
         </div>
     );
-};
+}
 
 export default Foodwatcher;

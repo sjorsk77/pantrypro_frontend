@@ -28,7 +28,7 @@ export function Home() {
                 setLoading(false);
             }
         };
-        fetchData();
+        fetchData().then(r => console.log(r));
     }, [Cookies.get('token')])
 
     return (

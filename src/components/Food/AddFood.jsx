@@ -30,7 +30,6 @@ function AddFood({onClose, onAdd, pantryId})  {
         setQuantity(event.target.value);
     }
 
-
     const handleEanCodeChange = async (event) => {
         setEanCode(event.target.value);
         if (event.target.value.length === 8 || event.target.value.length === 13) {
@@ -61,7 +60,6 @@ function AddFood({onClose, onAdd, pantryId})  {
 
         console.log(eanActive);
     }
-
 
 
     const handleSubmit = async () => {

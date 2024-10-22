@@ -37,8 +37,8 @@ function PantryView({pantryId, onPantryDelete}) {
     }
 
     useEffect(() => {
-        getFoods();
-        getPantryData()
+        getFoods().then(r => console.log(r));
+        getPantryData().then(r => console.log(r));
     }, [pantryId]);
 
     const handleAddFoodClick = () => {
