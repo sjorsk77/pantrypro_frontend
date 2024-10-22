@@ -1,7 +1,7 @@
 const API_CONFIG = {
     pantryproApi: {
-        // baseURL: 'http://193.123.63.177:8080',
-        baseURL: 'http://localhost:8080',
+        baseURL: 'http://193.123.63.177:8080',
+        // baseURL: 'http://localhost:8080',
         endpoints: {
             login: '/account/login',
             register: '/account/register',
