@@ -30,8 +30,9 @@ jobs:
       - name: Install babel
         run: npm install --save-dev @babel/plugin-proposal-private-property-in-object
 
-
       - name: Build the React app
+        env:
+          REACT_APP_EDAMAM_API_KEY: ${{ secrets.EDAMAM_API_KEY }}
         run: npm run build
 
       - name: Build Docker image
@@ -48,15 +49,15 @@ jobs:
 
   deploy:
     runs-on: ubuntu-latest
-    needs: build  # Ensure this runs after the build job
+    needs: build
 
     steps:
       - name: SSH into Server and Deploy
         uses: appleboy/ssh-action@master
         with:
-          host: ${{ secrets.SSH_HOST }}  # Your server's IP
-          username: ${{ secrets.SSH_USER }}  # Your server username
-          key: ${{ secrets.SSH_PRIVATE_KEY }}  # Your SSH private key
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
             # Pull the latest Docker image
             docker pull ${{ secrets.DOCKER_USERNAME }}/reactapp:latest
