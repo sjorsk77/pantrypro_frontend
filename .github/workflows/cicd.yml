@@ -1,4 +1,4 @@
-name: CI/CD Pipeline for React App
+name: CI/CD Pipeline frontend
 
 on:
   push:
