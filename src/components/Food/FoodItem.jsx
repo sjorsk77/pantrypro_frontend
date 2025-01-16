@@ -2,7 +2,7 @@ import useApiWrapper from "../../api/ApiWrapper";
 import useFormatServices from "../../Services/FormatServices";
 import {toast} from "react-toastify";
 
-function FoodItem({id, name, expiryDate, weight, onClick}) {
+function FoodItem({id, name, expiryDate, weight, onClick, unit}) {
 
     const {deleteFood} = useApiWrapper();
     const {formatDate} = useFormatServices();
@@ -47,7 +47,7 @@ function FoodItem({id, name, expiryDate, weight, onClick}) {
             <button
                 className={`flex flex-row justify-between gap-10 w-full items-center ${backgroundStyle} rounded-md p-3`}>
                 <h1 className="text-3xl font-bold">{name}</h1>
-                <h1 className="text-3xl font-bold">{weight}</h1>
+                <h1 className="text-3xl font-bold">{weight}{unit}</h1>
                 <h1>{formatDate(expiryDate)}</h1>
             </button>
             <button onClick={handleDelete} className="bg-red-600 p-2 rounded-md flex justify-center items-center">

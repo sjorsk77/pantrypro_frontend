@@ -3,6 +3,7 @@ import useApiWrapper from "../../api/ApiWrapper";
 import FoodItem from "../Food/FoodItem";
 import AddFood from "../Food/AddFood";
 import {toast} from "react-toastify";
+import {Dropdown} from "../Inputs/Dropdown";
 
 
 
@@ -45,6 +46,15 @@ function PantryView({pantryId, onPantryDelete}) {
         setPopupVisible(true);
     };
 
+    const handleSort = (type) => {
+        if (type === 'Expiry date') {
+            setFoods([...foods].sort((a, b) => new Date(a.expiryDate) - new Date(b.expiryDate)));
+        } else if (type === 'Name') {
+            setFoods([...foods].sort((a, b) => a.name.localeCompare(b.name)));
+        }
+
+    }
+
     const handleDeletePantry = async () => {
         try {
             await deletePantry(pantryId);
@@ -69,16 +79,17 @@ function PantryView({pantryId, onPantryDelete}) {
 
             </div>
             <div className="flex flex-col  bg-white w-full h-full rounded-2xl">
-                <div className="flex flex-row w-full items-cetner justify-between px-10 mt-4">
-                    <h1 className="text-3xl font-bold py-10">{foods.length === 0 ? (<h1>Add food to your pantry!</h1>) : (<h1>Food items: {foods.length}</h1>)}</h1>
-                    <button>
+                <div className="flex flex-row w-full items-center justify-evenly px-10 mt-4">
+                    <h1 className="text-3xl font-bold py-10 w-full">{foods.length === 0 ? (<h1>Add food to your pantry!</h1>) : (<h1>Food items: {foods.length}</h1>)}</h1>
+                    <div className='flex flex-row w-full justify-center items-center'>
                         <box-icon name='filter-alt'></box-icon>
-                    </button>
+                        <Dropdown options={['Expiry date', 'Name']}
+                                  onSelect={(value) => handleSort(value)}/>
+                    </div>
                 </div>
                 <div>
                     <ul>
                         {foods
-                            .sort((a, b) => new Date(a.expiryDate) - new Date(b.expiryDate)) // Sort by expiryDate
                             .map((food) => {
                                 return (
                                     <FoodItem
@@ -87,6 +98,7 @@ function PantryView({pantryId, onPantryDelete}) {
                                         name={food.name}
                                         expiryDate={food.expiryDate}
                                         weight={food.quantity}
+                                        unit={food.unit}
                                         onClick={getFoods}
                                     />
                                 );

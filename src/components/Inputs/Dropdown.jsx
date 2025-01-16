@@ -1,9 +1,14 @@
 import React, { useState } from 'react';
 import { useEffect } from 'react';
 
-const Dropdown = ({ label, options, onSelect }) => {
+const Dropdown = ({ label, options, value, onSelect }) => {
     const [isOpen, setIsOpen] = useState(false);
     const [selectedOption, setSelectedOption] = useState('');
+
+    useEffect(() => {
+        // Update selectedOption when the value prop changes
+        setSelectedOption(value);
+    }, [value]);
 
     const toggleDropdown = () => setIsOpen(!isOpen);
 
@@ -15,7 +20,7 @@ const Dropdown = ({ label, options, onSelect }) => {
     };
 
     return (
-        <div className="relative mb-1 w-1/3">
+        <div className="relative w-full">
             {label && <label className="block text-gray-700 font-bold">{label}</label>}
             <button
                 onClick={toggleDropdown}
@@ -24,7 +29,7 @@ const Dropdown = ({ label, options, onSelect }) => {
                 {selectedOption || 'Select..'}
             </button>
             {isOpen && (
-                <ul className="absolute z-10 w-full mt-1 bg-white border border-gray-300 rounded-md shadow-lg">
+                <ul className="absolute z-10 w-full mt-1 bg-white border border-gray-300 rounded-md shadow-lg max-h-60 overflow-y-auto">
                     {options.map((option, index) => (
                         <li
                             key={index}

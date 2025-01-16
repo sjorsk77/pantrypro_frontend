@@ -1,6 +1,7 @@
 import API_CONFIG from "./ApiConfig";
 import Cookies from "js-cookie";
 import {useNavigate} from "react-router-dom";
+import {DIET_TYPES, HEALTH_TYPES} from "../assets/Data/DietaryTypes";
 
 const useApiWrapper = () => {
     const navigate = useNavigate();
@@ -32,7 +33,6 @@ const useApiWrapper = () => {
         const response = await fetch(url, options);
 
         if (response.status === 403 || response.status === 401) {
-            console.log('Unauthorized');
             Cookies.set('token', '');
             navigate('/login');
         }
@@ -41,20 +41,70 @@ const useApiWrapper = () => {
         let responseBody;
 
         if (contentType && contentType.includes('application/json')) {
-            responseBody = await response.json(); // Parse as JSON if Content-Type is JSON
+            responseBody = await response.json();
         } else {
-            responseBody = await response.text(); // Parse as text otherwise
+            responseBody = await response.text();
         }
 
         if (!response.ok) {
-            console.log('Error response:', response.statusText); // Log the error
+            console.log('Error response:', response.statusText);
             throw new Error(responseBody);
         }
 
-
-        console.log('StatusCode:', response.status ,'Success response:', responseBody);
-
         return responseBody;
+    };
+
+    const searchRecipes = async (requestBody) => {
+
+        let url = `${API_CONFIG.edamamApi.baseURL}?type=public`;
+        url += `&app_id=${API_CONFIG.edamamApi.applicationId}&app_key=${API_CONFIG.edamamApi.apiKey}`;
+
+        if (requestBody && requestBody.dietTypes) {
+            const dietTypes = requestBody.dietTypes.filter(type => DIET_TYPES.includes(type.name));
+            const healthTypes = requestBody.dietTypes.filter(type => HEALTH_TYPES.includes(type.name));
+
+            if (dietTypes.length > 0) {
+                dietTypes.forEach(diet => {
+                    url += `&diet=${diet.name.toLowerCase()}`;
+                });
+            }
+
+            if (healthTypes.length > 0) {
+                healthTypes.forEach(health => {
+                    url += `&health=${health.name.toLowerCase()}`;
+                });
+            }
+        } else {
+            console.error('requestBody or dietTypes is undefined:', requestBody);
+        }
+
+        if (requestBody.maxCalories || requestBody.minCalories) {
+            url += `&calories=${requestBody.minCalories || 0}-${requestBody.maxCalories || ''}`;
+        }
+
+        if (requestBody.ingredients && requestBody.ingredients.length > 0) {
+            url += `&q=${requestBody.ingredients.join(",")}`;
+        }
+
+        const headers = {
+            'Content-Type': 'application/json',
+        };
+
+        try {
+            console.log(url);
+            const response = await fetch(url, { method: 'GET', headers });
+
+            if (!response.ok) {
+                console.error('Error response:', response.statusText);
+                throw new Error(`Failed to fetch recipes: ${response.statusText}`);
+            }
+
+            const data = await response.json();
+            return data.hits.map(hit => hit.recipe); // Returns only recipe objects
+        } catch (error) {
+            console.error("Error fetching recipes from Edamam:", error);
+            throw error;
+        }
     };
 
     return {
@@ -62,7 +112,7 @@ const useApiWrapper = () => {
         register: (data) => sendApiCall('pantryproApi', 'register', 'POST', data),
         getUser : (token) => sendApiCall('pantryproApi', 'user', 'GET', null, token, true),
 
-        getPantries: (token) => sendApiCall('pantryproApi', 'pantries', 'GET', null, token, true),
+        getPantries: () => sendApiCall('pantryproApi', 'pantries', 'GET', null, null, true),
         getPantry: (id) => sendApiCall('pantryproApi', 'singlePantry', 'GET', null, id, true),
         createPantry: (data) => sendApiCall('pantryproApi', 'pantries', 'POST', data, null, true),
         deletePantry: (id) => sendApiCall('pantryproApi', 'pantries', 'DELETE', null, id, true),
@@ -71,13 +121,16 @@ const useApiWrapper = () => {
         deleteFood: (id) => sendApiCall('pantryproApi', 'food', 'DELETE', null, id, true),
         addFood: (data) => sendApiCall('pantryproApi', 'food', 'POST', data, null, true),
 
-        getDiets: (token) => sendApiCall('pantryproApi', 'diets', 'GET', null, token, true),
-        updateDiet: (data) => sendApiCall('pantryproApi', 'diets', 'PUT', data, data.id, true),
+        getDiets: () => sendApiCall('pantryproApi', 'diets', 'GET', null, null, true),
+        updateDiet: (data) => sendApiCall('pantryproApi', 'diets', 'PATCH', data, data.id, true),
         getDietTypes: () => sendApiCall('pantryproApi', 'diets', 'GET', null, 'types', true),
+        createDiet: (data) => sendApiCall('pantryproApi', 'createDiet', 'POST', data, null, true),
 
-        getRiskFood: (body) => sendApiCall('pantryproApi', 'riskFood', 'POST', body, null, true),
+        getRiskFood: (daysToExpiration) => sendApiCall('pantryproApi', 'riskFood', 'GET', null, daysToExpiration, true),
 
         getFoodByBarcode: (barcode) => sendApiCall('openfoodfactsApi', 'getProduct', 'GET', null, barcode, false),
+
+        searchForRecipes: (requestBody) => searchRecipes(requestBody),
     }
 }
 export default useApiWrapper;
