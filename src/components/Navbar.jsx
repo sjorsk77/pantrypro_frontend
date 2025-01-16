@@ -12,13 +12,12 @@ const Navbar = () => {
         <nav className="flex flex-row items-center w-full h-20 justify-around">
             <Link to="/"> <img src={img} alt="img" className="rounded-xl h-full w-20"></img></Link>
             <div className="flex items-center gap-10 font-semibold text-lg">
-                <Link to="/">Home</Link>
-                <Link to="/">Pantries</Link>
-                <Link to="/">Cookbook</Link>
+                <Link to="/home">Home</Link>
+                <Link to="/pantry">Pantries</Link>
+                <Link to="/cookbook">Cookbook</Link>
                 <Link to="/">Meals</Link>
-                <Link to="/">Diets</Link>
+                <Link to="/diet">Diets</Link>
                 <Link to="/">Messages</Link>
-                <Link to="/">Cookbook</Link>
                 <Link to="/">Contact us</Link>
             </div>
             <button className="flex items-center gap-1 text-lg font-semibold bg-background-gray rounded-xl px-5 py-5 h-1/3 shadow-md"

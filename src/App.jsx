@@ -5,6 +5,9 @@ import { Account } from './pages/Account';
 import { Home } from './pages/Home';
 import { Pantries } from './pages/Pantries';
 import { Diets } from './pages/Diets';
+import Cookbook from "./pages/Cookbook";
+import RecipeBrowser from "./pages/RecipeBrowser";
+import AdminPage from "./pages/Admin";
 
 function App() {
 
@@ -19,6 +22,9 @@ function App() {
         <Route path="/login" element={<Account />} />
         <Route path="/pantry" element={<Pantries />} />
           <Route path="/diet" element={<Diets />} />
+        <Route path="/cookbook" element={<Cookbook />} />
+        <Route path="/recipe" element={<RecipeBrowser/>}/>
+        <Route path="/admin" element={<AdminPage/>}/>
 
         
         {/* Optionally, handle other routes here */}

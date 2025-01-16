@@ -37,7 +37,7 @@ export function Register({setIsLogin}) {
 
         try {
             const response = await register(data);
-            toast.success('Registration successful');
+            toast.success('Registration successful, please verify your email on' + data.email);
             navigate('/');
         } catch (error) {
             toast.error(error.message);

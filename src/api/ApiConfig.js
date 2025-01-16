@@ -15,9 +15,10 @@ const API_CONFIG = {
         },
     },
     edamamApi: {
-        baseURL: 'https://api.edamam.com',
+        baseURL: 'https://api.edamam.com/api/recipes/v2',
+        applicationId: '9061b1b5',
+        apiKey: process.env.REACT_APP_EDAMAM_API_KEY,
         endpoints: {
-
         },
     },
     openfoodfactsApi: {

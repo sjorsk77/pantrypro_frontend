@@ -28,7 +28,11 @@ export function Login({setIsLogin}) {
         try {
             const response = await login(data);
             Cookies.set('token', response.token);
-            navigate('/home');
+            if(response.role === 'ADMIN') {
+                navigate('/admin');
+            } else {
+                navigate('/home');
+            }
         } catch (error) {
             toast.error(error.message);
         } finally {

@@ -25,7 +25,7 @@ const InputBox = ({ label, placeholder, type = 'text', regex, errorMessage, valu
     };
 
     return (
-        <div className="mb-1 w-full">
+        <div className="w-full">
             {label && <label className="block text-gray-700 font-bold">{label}</label>}
             <input
                 type={type}
@@ -61,17 +61,16 @@ const InputBoxWithUnit = ({ label, placeholder, value, onChange, unit = 'gr' }) 
     };
 
     return (
-        <div className="mb-1 w-full">
+        <div className="w-full">
             {label && <label className="block text-gray-700 font-bold">{label}</label>}
             <div className="flex items-center">
                 <input
-                    type="number" // Ensure this is a number input
+                    type="number"
                     value={internalValue}
                     placeholder={placeholder}
                     onChange={handleChange}
-                    className=" p-2 border rounded-md border-gray-300 focus:outline-none w-fit"
+                    className=" p-2 border rounded-md border-gray-300 focus:outline-none"
                 />
-                <span className="ml-2">{unit}</span> {/* Display the unit next to the input */}
             </div>
         </div>
     );
@@ -110,5 +109,51 @@ const EditableText = ({ value, onChange }) => {
     );
 };
 
+const NumericInput = ({ label, placeholder, value, onChange, errorMessage, min, max, error }) => {
+    const [internalValue, setInternalValue] = useState(value || '');
+    const [isValid, setIsValid] = useState(true);
 
-export { InputBox, InputBoxWithUnit, EditableText };
+    useEffect(() => {
+        setInternalValue(value);
+    }, [value]);
+
+    const handleChange = (event) => {
+        const newValue = event.target.value;
+
+        // Validate input: allow only numeric values
+        if (/^-?\d*\.?\d*$/.test(newValue) || newValue === '') {
+            setInternalValue(newValue);
+            setIsValid(true);
+        } else {
+            setIsValid(false);  // Invalid input
+        }
+
+        // Pass the entire event to the parent component
+        if (onChange) {
+            onChange(event);
+        }
+    };
+
+    return (
+        <div className="w-full flex flex-col">
+            {label && <label className="block text-gray-700 font-bold">{label}</label>}
+            <input
+                type="text" // We use text type to handle input validation manually
+                value={internalValue}
+                placeholder={placeholder}
+                onChange={handleChange}
+                min={min}
+                max={max}
+                className={`w-full p-2 border rounded-md transition duration-200 ease-in-out focus:outline-none 
+                            ${internalValue !== '' && !isValid ? 'border-red-500' : 'border-gray-300'} 
+                            focus:ring-2 focus:ring-blue-500 disabled:opacity-25`}
+            />
+            {internalValue !== '' && !isValid && (
+                <div className="text-red-500 mt-1">{errorMessage || error}</div>
+            )}
+        </div>
+    );
+};
+
+
+export { InputBox, InputBoxWithUnit, EditableText, NumericInput};

@@ -57,6 +57,14 @@ export function Home() {
                     />
 
                     <HomeOption
+                        link="/recipe"
+                        bgColor="#F0C6AE"
+                        title="Recipe browser"
+                        icon="search"
+                        description="add description"
+                    />
+
+                    <HomeOption
                         link="/meal"
                         bgColor="#F0E6AE"
                         title="Meals"
